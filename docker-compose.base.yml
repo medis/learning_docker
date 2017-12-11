@@ -1,0 +1,33 @@
+version: '2'
+services:
+  nginx:
+    # Already built:
+    # image: audriusdocker/nginx:0.2.0
+    build: ./nginx
+    volumes:
+      - ./application:/var/www/html
+    networks:
+      - ab-net
+  php:
+    # image: audriusdocker/php:0.1.0
+    build: ./php
+    volumes:
+      - ./application:/var/www/html
+    networks:
+      - ab-net
+  redis:
+    image: redis:alpine
+    networks:
+      - ab-net
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - ab-net
+networks:
+  ab-net:
+    driver: "bridge"
+volumes:
+  mysqldata:
+    driver: "local"
